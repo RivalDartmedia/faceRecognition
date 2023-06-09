@@ -1,26 +1,35 @@
+"""
+    docstring
+"""
+# pylint: disable=import-error
 
-from fastapi import FastAPI, File, UploadFile, HTTPException,Request,status
 import os
-import shutil
+import uvicorn
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from resize_image import resize_image_dimension
-from fastapi.responses import FileResponse
-from fastapi.exceptions import RequestValidationError
 from deepface import DeepFace
-from pydantic import ValidationError
-import uvicorn
-import uuid
+from functions import resize_image_dimension, file_to_image
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-# penggunaan GPU 
+# penggunaan GPU
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 # os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 app = FastAPI()
+
 origins = ["*"]
-models = [
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+MODELS = [
     "VGG-Face", 
     "Facenet", 
     "Facenet512", 
@@ -31,18 +40,11 @@ models = [
     "Dlib", 
     "SFace",
 ]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.get('/api/facematch/v1')
 async def index():
     """
-        Ini testing Daffa
+        docstring
     """
 
     return 0
@@ -78,6 +80,8 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
             }
         }    
     """
+    # pylint: disable=raise-missing-from,invalid-name
+
     if file1.filename == '' or file2.filename == '':
         return JSONResponse(status_code=400,content={
             "status":400,
@@ -85,28 +89,29 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
         })
     try:
         # Save the uploaded file to a temporary directory on disk
-        unique = str(uuid.uuid4())[:8]
-        unique2 = str(uuid.uuid4())[:8]
-        extension1 = os.path.splitext(file1.filename)[1]
-        extension2 = os.path.splitext(file2.filename)[1]
-        temp_file_path1   = f"tmp/{unique}{extension1}"
-        temp_file_path2 = f"tmp/{unique2}{extension2}"
+        file_path1 = file_to_image(file1)
+        file_path2 = file_to_image(file2)
 
-        with open(temp_file_path1, "wb") as buffer:
-            shutil.copyfileobj(file1.file, buffer)
-        with open(temp_file_path2, "wb") as buffer:
-            shutil.copyfileobj(file2.file, buffer)
-
-        image1 = resize_image_dimension(temp_file_path1)
-        image2 = resize_image_dimension(temp_file_path2)
+        _ = resize_image_dimension(file_path1)
+        _ = resize_image_dimension(file_path2)
 
         # Process the uploaded file with DeepFace
-        result = DeepFace.verify(temp_file_path1, temp_file_path2, enforce_detection=False,model_name=models[2])
+        result = DeepFace.verify(
+            file_path1,
+            file_path2,
+            enforce_detection=False,
+            model_name=MODELS[2]
+        )
+
         result['verified'] = bool(result['verified'].item())
+
         # Return a JSON response indicating success
-        return JSONResponse(content={
-            "status":200,
-            "result": result})
+        return JSONResponse(
+            content={
+                "status":200,
+                "result": result
+            }
+        )
 
     except Exception as e:
         # If an error occurs, raise an HTTPException with a 500 status code
@@ -115,8 +120,8 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
         # Always close and remove the temporary file when finished
         file1.file.close()
         file2.file.close()
-        os.remove(temp_file_path1)
-        os.remove(temp_file_path2)
+        os.remove(file_path1)
+        os.remove(file_path2)
 
 
 if __name__ == "__main__":
