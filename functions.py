@@ -15,7 +15,7 @@ def resize_image_dimension(file_path):
     image = Image.open(file_path)
     width, height = image.size
 
-    if width <= 800 or height <= 800:
+    if height <= 800:
         return
 
     width = round(width*800/height)
