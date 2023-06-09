@@ -2,9 +2,9 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException,Request,status
 import os
 import shutil
+from PIL import Image
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from resize_image import resize_image_dimension
 from fastapi.responses import FileResponse
 from fastapi.exceptions import RequestValidationError
 from deepface import DeepFace
@@ -18,18 +18,19 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 # os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
+
 app = FastAPI()
 origins = ["*"]
 models = [
-    "VGG-Face", 
-    "Facenet", 
-    "Facenet512", 
-    "OpenFace", 
-    "DeepFace", 
-    "DeepID", 
-    "ArcFace", 
-    "Dlib", 
-    "SFace",
+  "VGG-Face", 
+  "Facenet", 
+  "Facenet512", 
+  "OpenFace", 
+  "DeepFace", 
+  "DeepID", 
+  "ArcFace", 
+  "Dlib", 
+  "SFace",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -97,8 +98,13 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
         with open(temp_file_path2, "wb") as buffer:
             shutil.copyfileobj(file2.file, buffer)
 
-        image1 = resize_image_dimension(temp_file_path1)
-        image2 = resize_image_dimension(temp_file_path2)
+        image = Image.open(temp_file_path1)
+        new_image = image.resize((800, 800))
+        new_image.save(temp_file_path1)
+
+        image = Image.open(temp_file_path2)
+        new_image = image.resize((800, 800))
+        new_image.save(temp_file_path2)
 
         # Process the uploaded file with DeepFace
         result = DeepFace.verify(temp_file_path1, temp_file_path2, enforce_detection=False,model_name=models[2])
