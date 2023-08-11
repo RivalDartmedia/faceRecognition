@@ -51,6 +51,35 @@ async def index():
 
 @app.post("/api/facematch/v1/verify")
 async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = File(...)):
+    """
+        Response Success Example:
+        {
+            "status": 200,
+            "result": {
+                "verified": false,
+                "distance": 0.49744723671250135,
+                "threshold": 0.4,
+                "model": "VGG-Face",
+                "detector_backend": "opencv",
+                "similarity_metric": "cosine",
+                "facial_areas": {
+                    "img1": {
+                        "x": 141,
+                        "y": 385,
+                        "w": 524,
+                        "h": 524
+                    },
+                    "img2": {
+                        "x": 483,
+                        "y": 85,
+                        "w": 271,
+                        "h": 271
+                    }
+                },
+                "time": 12.77
+            }
+        }    
+    """
     # pylint: disable=raise-missing-from,invalid-name
 
     if file1.filename == '' or file2.filename == '':
@@ -75,16 +104,14 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
         )
 
         result['verified'] = bool(result['verified'].item())
-        distance = result['distance']
-        verified = result['verified']
-        rounded_distance = round(distance, 2)
+
         # Return a JSON response indicating success
-        return JSONResponse(content={
-            "status":200,
-            "result": {
-                "verified":verified,
-                "distance":rounded_distance,
-            }})
+        return JSONResponse(
+            content={
+                "status":200,
+                "result": result
+            }
+        )
 
     except Exception as e:
         # If an error occurs, raise an HTTPException with a 500 status code
