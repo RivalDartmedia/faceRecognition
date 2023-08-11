@@ -1,5 +1,23 @@
 [
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "uvicorn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uvicorn",
+        "description": "uvicorn",
+        "detail": "uvicorn",
+        "documentation": {}
+    },
+    {
         "label": "FastAPI",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -32,49 +50,7 @@
         "documentation": {}
     },
     {
-        "label": "Request",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "status",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "shutil",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "shutil",
-        "description": "shutil",
-        "detail": "shutil",
-        "documentation": {}
-    },
-    {
         "label": "JSONResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
-        "isExtraImport": true,
-        "detail": "fastapi.responses",
-        "documentation": {}
-    },
-    {
-        "label": "FileResponse",
         "importPath": "fastapi.responses",
         "description": "fastapi.responses",
         "isExtraImport": true,
@@ -90,14 +66,6 @@
         "documentation": {}
     },
     {
-        "label": "RequestValidationError",
-        "importPath": "fastapi.exceptions",
-        "description": "fastapi.exceptions",
-        "isExtraImport": true,
-        "detail": "fastapi.exceptions",
-        "documentation": {}
-    },
-    {
         "label": "DeepFace",
         "importPath": "deepface",
         "description": "deepface",
@@ -114,20 +82,19 @@
         "documentation": {}
     },
     {
-        "label": "ValidationError",
-        "importPath": "pydantic",
-        "description": "pydantic",
+        "label": "resize_image_dimension",
+        "importPath": "functions",
+        "description": "functions",
         "isExtraImport": true,
-        "detail": "pydantic",
+        "detail": "functions",
         "documentation": {}
     },
     {
-        "label": "uvicorn",
-        "kind": 6,
+        "label": "file_to_image",
+        "importPath": "functions",
+        "description": "functions",
         "isExtraImport": true,
-        "importPath": "uvicorn",
-        "description": "uvicorn",
-        "detail": "uvicorn",
+        "detail": "functions",
         "documentation": {}
     },
     {
@@ -140,11 +107,37 @@
         "documentation": {}
     },
     {
+        "label": "shutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "shutil",
+        "description": "shutil",
+        "detail": "shutil",
+        "documentation": {}
+    },
+    {
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
+        "isExtraImport": true,
+        "detail": "PIL",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ['TF_CPP_MIN_LOG_LEVEL']",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'\n# penggunaan GPU\n# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'\n# os.environ['CUDA_VISIBLE_DEVICES'] = '0'\napp = FastAPI()\norigins = [\"*\"]\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=origins,\n    allow_credentials=True,",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
         "label": "app",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "app = FastAPI()\norigins = [\"*\"]\nmodels = [\n  \"VGG-Face\", \n  \"Facenet\", \n  \"Facenet512\", \n  \"OpenFace\", \n  \"DeepFace\", \n  \"DeepID\", \n  \"ArcFace\", ",
+        "peekOfCode": "app = FastAPI()\norigins = [\"*\"]\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=origins,\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\nMODELS = [",
         "detail": "app",
         "documentation": {}
     },
@@ -153,17 +146,35 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "origins = [\"*\"]\nmodels = [\n  \"VGG-Face\", \n  \"Facenet\", \n  \"Facenet512\", \n  \"OpenFace\", \n  \"DeepFace\", \n  \"DeepID\", \n  \"ArcFace\", \n  \"Dlib\", ",
+        "peekOfCode": "origins = [\"*\"]\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=origins,\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\nMODELS = [\n    \"VGG-Face\", ",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "models",
+        "label": "MODELS",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "models = [\n  \"VGG-Face\", \n  \"Facenet\", \n  \"Facenet512\", \n  \"OpenFace\", \n  \"DeepFace\", \n  \"DeepID\", \n  \"ArcFace\", \n  \"Dlib\", \n  \"SFace\",",
+        "peekOfCode": "MODELS = [\n    \"VGG-Face\", \n    \"Facenet\", \n    \"Facenet512\", \n    \"OpenFace\", \n    \"DeepFace\", \n    \"DeepID\", \n    \"ArcFace\", \n    \"Dlib\", \n    \"SFace\",",
         "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "resize_image_dimension",
+        "kind": 2,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "def resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:\n        return file_path\n    width = round(width*800/height)\n    new_image = image.resize((width, 800))",
+        "detail": "functions",
+        "documentation": {}
+    },
+    {
+        "label": "file_to_image",
+        "kind": 2,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "def file_to_image(file):\n    \"\"\"\n        docstring\n    \"\"\"\n    unique = str(uuid.uuid4())[:8]\n    extension = os.path.splitext(file.filename)[1]\n    file_path   = f\"tmp/{unique}{extension}\"\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    return file_path",
+        "detail": "functions",
         "documentation": {}
     },
     {
