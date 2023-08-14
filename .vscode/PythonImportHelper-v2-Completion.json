@@ -9,6 +9,15 @@
         "documentation": {}
     },
     {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
         "label": "uvicorn",
         "kind": 6,
         "isExtraImport": true,
@@ -140,6 +149,24 @@
         "documentation": {}
     },
     {
+        "label": "ResultResponse",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = 0.36\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str):\n    \"\"\"\n        Success Response",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "VerifyResponse",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str):\n    \"\"\"\n        Success Response\n        {\n            \"status\": 200,\n            \"result\": {",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
         "label": "os.environ['TF_CPP_MIN_LOG_LEVEL']",
         "kind": 5,
         "importPath": "app",
@@ -189,7 +216,7 @@
         "kind": 2,
         "importPath": "functions",
         "description": "functions",
-        "peekOfCode": "def file_to_image(file):\n    \"\"\"\n        docstring\n    \"\"\"\n    unique = str(uuid.uuid4())[:8]\n    extension = os.path.splitext(file.filename)[1]\n    file_path   = f\"tmp/{unique}{extension}\"\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    return file_path",
+        "peekOfCode": "def file_to_image(file):\n    unique = str(uuid.uuid4())[:8]\n    extension = os.path.splitext(file.filename)[1]\n    file_path   = f\"tmp/{unique}{extension}\"\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    return file_path",
         "detail": "functions",
         "documentation": {}
     },

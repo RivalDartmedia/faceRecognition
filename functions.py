@@ -25,9 +25,6 @@ def resize_image_dimension(file_path):
     return file_path
 
 def file_to_image(file):
-    """
-        docstring
-    """
 
     unique = str(uuid.uuid4())[:8]
     extension = os.path.splitext(file.filename)[1]
