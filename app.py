@@ -10,7 +10,36 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from deepface import DeepFace
 from functions import resize_image_dimension, file_to_image
+from pydantic import BaseModel,Field
 
+
+# class ResponseModel(BaseModel):
+#     status: int
+#     result: dict = Field(None )
+
+#     class Config:
+#         schema_extra = {
+#             "example": {
+#                 "status": 200,
+#                 "result": {
+#                     "verified": False,
+#                     "distance": 0.36
+#                 },
+#             }
+#         }
+#     status: int
+#     result: dict
+#     verified: bool
+#     distance: float
+
+#     class Config:
+#         schema_extra = {
+#             "status": 200,
+#             "result": {
+#                 "verified": False,
+#                 "distance": 0.36
+#             }
+#         }
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # penggunaan GPU
@@ -41,16 +70,18 @@ MODELS = [
     "SFace",
 ]
 
-@app.get('/api/facematch/v1')
-async def index():
-    """
-        docstring
-    """
-
-    return 0
-
 @app.post("/api/facematch/v1/verify")
 async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = File(...)):
+    """
+        Success Response
+        {
+            "status": 200,
+            "result": {
+                "verified": false,
+                "distance": 0.36
+            }
+        }
+    """
     # pylint: disable=raise-missing-from,invalid-name
 
     if file1.filename == '' or file2.filename == '':
@@ -95,6 +126,8 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
         file2.file.close()
         os.remove(file_path1)
         os.remove(file_path2)
+        
+
 
 
 if __name__ == "__main__":
