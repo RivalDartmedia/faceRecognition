@@ -6,12 +6,12 @@
 import os
 import requests
 import uvicorn
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from deepface import DeepFace
-from functions import resize_image_dimension, file_to_image
-from pydantic import BaseModel,Field
+from functions import resize_image_dimension
+from pydantic import BaseModel
 
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -50,8 +50,10 @@ class VerifyResponse(BaseModel):
     status: int = 200
     result: ResultResponse
 
+apiKey = "bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4="
+
 @app.get("/api/facematch/v1/verify",response_model=VerifyResponse)
-async def create_upload_file(file1:str,file2:str):
+async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description="API key for authentication using Bearer")):
     """
         Success Response
         {
@@ -62,6 +64,12 @@ async def create_upload_file(file1:str,file2:str):
             }
         }
     """
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=403, detail="Invalid Authorization header")
+    provided_api_key = authorization.split(" ")[1]
+    expected_api_key = "bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4="
+    if provided_api_key != expected_api_key:
+        raise HTTPException(status_code=403, detail="Invalid API key")
     try:
         image1_path = "tmp/image1.jpg"
         image2_path = "tmp/image2.jpg"
@@ -159,4 +167,4 @@ async def create_upload_file(file1:str,file2:str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="119.10.176.108", port=9001)
+    uvicorn.run(app, host="localhost", port=9001)

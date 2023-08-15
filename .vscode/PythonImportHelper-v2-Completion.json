@@ -35,23 +35,15 @@
         "documentation": {}
     },
     {
-        "label": "File",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "UploadFile",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
         "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Header",
         "importPath": "fastapi",
         "description": "fastapi",
         "isExtraImport": true,
@@ -99,23 +91,7 @@
         "documentation": {}
     },
     {
-        "label": "file_to_image",
-        "importPath": "functions",
-        "description": "functions",
-        "isExtraImport": true,
-        "detail": "functions",
-        "documentation": {}
-    },
-    {
         "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
@@ -153,7 +129,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = 0.36\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str):\n    \"\"\"\n        Success Response",
+        "peekOfCode": "class ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = 0.36\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description=\"API key for authentication using Bearer\")):\n    \"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -162,7 +138,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str):\n    \"\"\"\n        Success Response\n        {\n            \"status\": 200,\n            \"result\": {",
+        "peekOfCode": "class VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description=\"API key for authentication using Bearer\")):\n    \"\"\"\n        Success Response\n        {\n            \"status\": 200,",
         "detail": "app",
         "documentation": {}
     },
@@ -199,6 +175,15 @@
         "importPath": "app",
         "description": "app",
         "peekOfCode": "MODELS = [\n    \"VGG-Face\", \n    \"Facenet\", \n    \"Facenet512\", \n    \"OpenFace\", \n    \"DeepFace\", \n    \"DeepID\", \n    \"ArcFace\", \n    \"Dlib\", \n    \"SFace\",",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "apiKey",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "apiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description=\"API key for authentication using Bearer\")):\n    \"\"\"\n        Success Response\n        {\n            \"status\": 200,\n            \"result\": {\n                \"verified\": false,\n                \"distance\": 0.36",
         "detail": "app",
         "documentation": {}
     },
