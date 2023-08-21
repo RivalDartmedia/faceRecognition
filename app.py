@@ -86,7 +86,8 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
             image1_path,
             image2_path,
             enforce_detection=False,
-            model_name=MODELS[2]
+            model_name=MODELS[2],
+            detector_backend='retinaface'
         )
 
         result['verified'] = bool(result['verified'].item())
