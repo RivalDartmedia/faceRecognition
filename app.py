@@ -6,11 +6,11 @@
 import os
 import requests
 import uvicorn
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from deepface import DeepFace
-from functions import resize_image_dimension
+from functions import resize_image_dimension, file_to_image, check_brightness
 from pydantic import BaseModel
 
 
@@ -80,6 +80,9 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
 
         _ = resize_image_dimension(image1_path)
         _ = resize_image_dimension(image2_path)
+
+        image1_path = check_brightness(image1_path)
+        image2_path = check_brightness(image2_path)
 
         # Process the uploaded file with DeepFace
         result = DeepFace.verify(
