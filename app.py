@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException, Header, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from deepface import DeepFace
-from functions import resize_image_dimension, file_to_image, check_brightness
+from functions import*
 from pydantic import BaseModel
 
 
@@ -43,14 +43,29 @@ MODELS = [
     "Dlib", 
     "SFace",
 ]
+
+DETECTORS = [
+    "opencv", 
+    "retinaface", 
+    "mtcnn", 
+    "ssd", 
+    "dlib", 
+    "mediapipe",
+]
+
+# SET FACE-RECOG CONFIG HERE
+USED_MODEL = MODELS[2]
+USED_DETECTOR = DETECTORS[2]
+VALID_DISTANCE = 0.37
+apiKey = "bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4="
+
 class ResultResponse(BaseModel):
         verified:bool = False
-        distance:float = 0.36
+        distance:float = VALID_DISTANCE
 class VerifyResponse(BaseModel):
     status: int = 200
     result: ResultResponse
 
-apiKey = "bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4="
 
 @app.get("/api/facematch/v1/verify",response_model=VerifyResponse)
 async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description="API key for authentication using Bearer")):
@@ -89,14 +104,20 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
             image1_path,
             image2_path,
             enforce_detection=False,
-            model_name=MODELS[1],
-            detector_backend='mtcnn'
+            model_name=USED_MODEL,
+            detector_backend=USED_DETECTOR
         )
 
         result['verified'] = bool(result['verified'].item())
         distance = result['distance']
         verified = result['verified']
         rounded_distance = round(distance, 2)
+
+        if (rounded_distance <= VALID_DISTANCE or verified == True):
+            verified = True
+        else:
+            verified = False
+
         return JSONResponse(content={
             "status":200,
             "result": {
@@ -111,11 +132,13 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
             os.remove(image1_path)
         if os.path.exists(image2_path):
             os.remove(image2_path)
-        
-# @app.post("/api/facematch/v1/verify")
+
+
+# # Post request for testing
+# @app.post("/api/facematch/v1/verify",response_model=VerifyResponse)
 # async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = File(...)):
 #     """
-#         Success Response
+#         Example Success Response
 #         {
 #             "status": 200,
 #             "result": {
@@ -124,34 +147,37 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
 #             }
 #         }
 #     """
-#     # pylint: disable=raise-missing-from,invalid-name
-
-#     if file1.filename == '' or file2.filename == '':
-#         return JSONResponse(status_code=400,content={
-#             "status":400,
-#             "message":"file1 and file2 are required"
-#         })
 #     try:
-#         # Save the uploaded file to a temporary directory on disk
+#         #  Save the uploaded file to a temporary directory on disk
 #         file_path1 = file_to_image(file1)
 #         file_path2 = file_to_image(file2)
 
 #         _ = resize_image_dimension(file_path1)
 #         _ = resize_image_dimension(file_path2)
 
+
+#         check_brightness(file_path1)
+#         check_brightness(file_path2)
+
 #         # Process the uploaded file with DeepFace
 #         result = DeepFace.verify(
 #             file_path1,
 #             file_path2,
 #             enforce_detection=False,
-#             model_name=MODELS[2]
+#             model_name=USED_MODEL,
+#             detector_backend=USED_DETECTOR
 #         )
 
 #         result['verified'] = bool(result['verified'].item())
 #         distance = result['distance']
 #         verified = result['verified']
 #         rounded_distance = round(distance, 2)
-#         # Return a JSON response indicating success
+
+#         if (rounded_distance <= VALID_DISTANCE or verified == True):
+#             verified = True
+#         else:
+#             verified = False
+
 #         return JSONResponse(content={
 #             "status":200,
 #             "result": {
@@ -160,15 +186,14 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
 #             }})
 
 #     except Exception as e:
-#         # If an error occurs, raise an HTTPException with a 500 status code
 #         raise HTTPException(status_code=500, detail=str(e))
 #     finally:
-#         # Always close and remove the temporary file when finished
-#         file1.file.close()
-#         file2.file.close()
-#         os.remove(file_path1)
-#         os.remove(file_path2)
+#         if os.path.exists(file_path1):
+#             os.remove(file_path1)
+#         if os.path.exists(file_path2):
+#             os.remove(file_path2)
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="119.10.176.108", port=9001)
+    # uvicorn.run(app, host="localhost", port=9005)

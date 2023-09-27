@@ -9,8 +9,9 @@ import cv2
 import numpy as np
 from PIL import Image
 
-MIN_BRIGHTNESS_THRESHOLD = 100
-MAX_BRIGHTNESS_THRESHOLD = 150
+# SET BRIGHTNESS CONFIG HERE
+MIN_BRIGHTNESS_THRESHOLD = 75
+MAX_BRIGHTNESS_THRESHOLD = 175
 
 def resize_image_dimension(file_path):
     """
@@ -42,7 +43,11 @@ def file_to_image(file):
 
 
 def check_brightness(image):
-    print("ini image",image)
+    """
+        auto brightness & auto sharpness
+    """
+
+    print("ini image ",image)
     path_image = image
     splitted_path = path_image.split("/")
     
@@ -55,13 +60,37 @@ def check_brightness(image):
     print("Original Brightness : ", average_brighness)
 
     if average_brighness < MIN_BRIGHTNESS_THRESHOLD or average_brighness > MAX_BRIGHTNESS_THRESHOLD:
+       modified_image = sharpen_image(modified_image, level=2) # Sharpen image to LV2, if image is Dark
        brightness_factor = MIN_BRIGHTNESS_THRESHOLD / average_brighness
        modified_image =  np.clip(modified_image * brightness_factor, 0, 255).astype(np.uint8)
        gray_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2GRAY)
        average_brighness = np.mean(gray_image)
        print("Adjusted Brightness : ", average_brighness)
-       cv2.imwrite(path_image,modified_image)
-    #    cv2.imwrite(str(splitted_path[0])+"/brightness"+str(splitted_path[1]),modified_image)
-
-    else:
+       cv2.imwrite(str(splitted_path[0])+"/"+str(splitted_path[1]), modified_image)
+    #    cv2.imwrite(str(splitted_path[0])+"/brightness"+str(splitted_path[1]), modified_image)
+    else: 
+        modified_image = sharpen_image(modified_image, level=1)  # Sharpen image to LV1, if image has normal brightness
+        cv2.imwrite(str(splitted_path[0])+"/"+str(splitted_path[1]), modified_image)
         print("Image Brightness is Normal : ", average_brighness)
+
+def sharpen_image(blur_image, level):
+    # blur_image = cv2.imread(blur_image)
+    # gray = cv2.cvtColor(blur_image, cv2.COLOR_BGR2GRAY)
+
+    if (level == 1):
+        kernel = np.array([
+        [0, -1, 0],
+        [-1, 5, -1],
+        [0, -1, 0]
+        ])
+        print("SHARPENED LV1")
+    else:
+        kernel = np.array([
+        [-1, -1, -1],
+        [-1, 9, -1],
+        [-1, -1, -1]
+        ])
+        print("SHARPENED LV2")
+
+    sharpened_image = cv2.filter2D(blur_image, -1, kernel)
+    return sharpened_image
