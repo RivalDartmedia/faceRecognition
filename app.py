@@ -12,7 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from deepface import DeepFace
 from functions import*
 from pydantic import BaseModel
-
+from datetime import datetime
+from fastapi import Request
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
@@ -65,7 +66,22 @@ class ResultResponse(BaseModel):
 class VerifyResponse(BaseModel):
     status: int = 200
     result: ResultResponse
+    
+async def log_request(request: Request, call_next):
+    # Cetak detail permintaan HTTP
+    print(f"Time: {datetime.now()}\t")
+    print(f"Received request: {request.method} {request.url}")
+    print(f"Headers: {request.headers}")
+    print(f"Query Parameters: {request.query_params}")
+    print(f"Path Parameters: {request.path_params}")
+    print(f"Body: {await request.body()}")
 
+    # Panggil fungsi berikutnya dalam rantai middleware atau aplikasi utama
+    response = await call_next(request)
+
+    return response
+
+app.middleware('http')(log_request)
 
 @app.get("/api/facematch/v1/verify",response_model=VerifyResponse)
 async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description="API key for authentication using Bearer")):
@@ -79,11 +95,17 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
             }
         }
     """
+    
+    
     if not authorization.startswith("Bearer "):
+        print(f"{datetime.now()}\t[Error Authorization]")
+        print(e)
         raise HTTPException(status_code=403, detail="Invalid Authorization header")
     provided_api_key = authorization.split(" ")[1]
     expected_api_key = "bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4="
     if provided_api_key != expected_api_key:
+        print(f"{datetime.now()}\t[Error Invalid API Key]")
+        print(e)
         raise HTTPException(status_code=403, detail="Invalid API key")
     try:
         image1_path = "tmp/image1.jpg"
@@ -126,6 +148,8 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
             }})
 
     except Exception as e:
+        print(f"{datetime.now()}\t[Error Exception]")
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         if os.path.exists(image1_path):

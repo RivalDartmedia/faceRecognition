@@ -47,11 +47,9 @@ def check_brightness(image):
         auto brightness & auto sharpness
     """
 
-    print("ini image ",image)
     path_image = image
     splitted_path = path_image.split("/")
     
-    print(str(path_image)+"image path")
     modified_image = cv2.imread(image)
     # cv2.imwrite(str(splitted_path[0])+"/before"+str(splitted_path[1]),modified_image)
     gray_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2GRAY)

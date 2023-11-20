@@ -67,6 +67,14 @@
         "documentation": {}
     },
     {
+        "label": "Request",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "JSONResponse",
         "importPath": "fastapi.responses",
         "description": "fastapi.responses",
@@ -99,35 +107,19 @@
         "documentation": {}
     },
     {
-        "label": "resize_image_dimension",
-        "importPath": "functions",
-        "description": "functions",
-        "isExtraImport": true,
-        "detail": "functions",
-        "documentation": {}
-    },
-    {
-        "label": "file_to_image",
-        "importPath": "functions",
-        "description": "functions",
-        "isExtraImport": true,
-        "detail": "functions",
-        "documentation": {}
-    },
-    {
-        "label": "check_brightness",
-        "importPath": "functions",
-        "description": "functions",
-        "isExtraImport": true,
-        "detail": "functions",
-        "documentation": {}
-    },
-    {
         "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
         "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
         "documentation": {}
     },
     {
@@ -179,7 +171,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = 0.36\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description=\"API key for authentication using Bearer\")):\n    \"\"\"",
+        "peekOfCode": "class ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")\n    print(f\"Received request: {request.method} {request.url}\")",
         "detail": "app",
         "documentation": {}
     },
@@ -188,7 +180,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description=\"API key for authentication using Bearer\")):\n    \"\"\"\n        Success Response\n        {\n            \"status\": 200,",
+        "peekOfCode": "class VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")\n    print(f\"Received request: {request.method} {request.url}\")\n    print(f\"Headers: {request.headers}\")\n    print(f\"Query Parameters: {request.query_params}\")\n    print(f\"Path Parameters: {request.path_params}\")",
         "detail": "app",
         "documentation": {}
     },
@@ -229,11 +221,47 @@
         "documentation": {}
     },
     {
+        "label": "DETECTORS",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "DETECTORS = [\n    \"opencv\", \n    \"retinaface\", \n    \"mtcnn\", \n    \"ssd\", \n    \"dlib\", \n    \"mediapipe\",\n]\n# SET FACE-RECOG CONFIG HERE\nUSED_MODEL = MODELS[2]",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "USED_MODEL",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "USED_MODEL = MODELS[2]\nUSED_DETECTOR = DETECTORS[2]\nVALID_DISTANCE = 0.37\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "USED_DETECTOR",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "USED_DETECTOR = DETECTORS[2]\nVALID_DISTANCE = 0.37\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "VALID_DISTANCE",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "VALID_DISTANCE = 0.37\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
         "label": "apiKey",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "apiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\n@app.get(\"/api/facematch/v1/verify\",response_model=VerifyResponse)\nasync def create_upload_file(file1:str,file2:str,authorization:str = Header(...,description=\"API key for authentication using Bearer\")):\n    \"\"\"\n        Success Response\n        {\n            \"status\": 200,\n            \"result\": {\n                \"verified\": false,\n                \"distance\": 0.36",
+        "peekOfCode": "apiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")",
         "detail": "app",
         "documentation": {}
     },
@@ -251,7 +279,7 @@
         "kind": 2,
         "importPath": "functions",
         "description": "functions",
-        "peekOfCode": "def file_to_image(file):\n    unique = str(uuid.uuid4())[:8]\n    extension = os.path.splitext(file.filename)[1]\n    file_path   = f\"tmp/{unique}{extension}\"\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    return file_path\ndef check_brightness(image):\n    print(\"ini image\",image)\n    path_image = image",
+        "peekOfCode": "def file_to_image(file):\n    unique = str(uuid.uuid4())[:8]\n    extension = os.path.splitext(file.filename)[1]\n    file_path   = f\"tmp/{unique}{extension}\"\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    return file_path\ndef check_brightness(image):\n    \"\"\"\n        auto brightness & auto sharpness",
         "detail": "functions",
         "documentation": {}
     },
@@ -260,7 +288,16 @@
         "kind": 2,
         "importPath": "functions",
         "description": "functions",
-        "peekOfCode": "def check_brightness(image):\n    print(\"ini image\",image)\n    path_image = image\n    splitted_path = path_image.split(\"/\")\n    print(str(path_image)+\"image path\")\n    modified_image = cv2.imread(image)\n    # cv2.imwrite(str(splitted_path[0])+\"/before\"+str(splitted_path[1]),modified_image)\n    gray_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2GRAY)\n    average_brighness = np.mean(gray_image)\n    print(\"Original Brightness : \", average_brighness)",
+        "peekOfCode": "def check_brightness(image):\n    \"\"\"\n        auto brightness & auto sharpness\n    \"\"\"\n    path_image = image\n    splitted_path = path_image.split(\"/\")\n    modified_image = cv2.imread(image)\n    # cv2.imwrite(str(splitted_path[0])+\"/before\"+str(splitted_path[1]),modified_image)\n    gray_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2GRAY)\n    average_brighness = np.mean(gray_image)",
+        "detail": "functions",
+        "documentation": {}
+    },
+    {
+        "label": "sharpen_image",
+        "kind": 2,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "def sharpen_image(blur_image, level):\n    # blur_image = cv2.imread(blur_image)\n    # gray = cv2.cvtColor(blur_image, cv2.COLOR_BGR2GRAY)\n    if (level == 1):\n        kernel = np.array([\n        [0, -1, 0],\n        [-1, 5, -1],\n        [0, -1, 0]\n        ])\n        print(\"SHARPENED LV1\")",
         "detail": "functions",
         "documentation": {}
     },
@@ -269,7 +306,7 @@
         "kind": 5,
         "importPath": "functions",
         "description": "functions",
-        "peekOfCode": "MIN_BRIGHTNESS_THRESHOLD = 100\nMAX_BRIGHTNESS_THRESHOLD = 150\ndef resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:\n        return file_path",
+        "peekOfCode": "MIN_BRIGHTNESS_THRESHOLD = 75\nMAX_BRIGHTNESS_THRESHOLD = 175\ndef resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:\n        return file_path",
         "detail": "functions",
         "documentation": {}
     },
@@ -278,7 +315,7 @@
         "kind": 5,
         "importPath": "functions",
         "description": "functions",
-        "peekOfCode": "MAX_BRIGHTNESS_THRESHOLD = 150\ndef resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:\n        return file_path\n    width = round(width*800/height)",
+        "peekOfCode": "MAX_BRIGHTNESS_THRESHOLD = 175\ndef resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:\n        return file_path\n    width = round(width*800/height)",
         "detail": "functions",
         "documentation": {}
     },
