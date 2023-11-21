@@ -74,7 +74,7 @@ async def log_request(request: Request, call_next):
     print(f"Headers: {request.headers}")
     print(f"Query Parameters: {request.query_params}")
     print(f"Path Parameters: {request.path_params}")
-    print(f"Body: {await request.body()}")
+    # print(f"Body: {await request.body()}")
 
     # Panggil fungsi berikutnya dalam rantai middleware atau aplikasi utama
     response = await call_next(request)
@@ -158,66 +158,66 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
             os.remove(image2_path)
 
 
-# # Post request for testing
-# @app.post("/api/facematch/v1/verify",response_model=VerifyResponse)
-# async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = File(...)):
-#     """
-#         Example Success Response
-#         {
-#             "status": 200,
-#             "result": {
-#                 "verified": false,
-#                 "distance": 0.36
-#             }
-#         }
-#     """
-#     try:
-#         #  Save the uploaded file to a temporary directory on disk
-#         file_path1 = file_to_image(file1)
-#         file_path2 = file_to_image(file2)
+# Post request for testing
+@app.post("/api/facematch/v1/verify",response_model=VerifyResponse)
+async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = File(...)):
+    """
+        Example Success Response
+        {
+            "status": 200,
+            "result": {
+                "verified": false,
+                "distance": 0.36
+            }
+        }
+    """
+    try:
+        #  Save the uploaded file to a temporary directory on disk
+        file_path1 = file_to_image(file1) 
+        file_path2 = file_to_image(file2)
 
-#         _ = resize_image_dimension(file_path1)
-#         _ = resize_image_dimension(file_path2)
+        _ = resize_image_dimension(file_path1)
+        _ = resize_image_dimension(file_path2)
 
 
-#         check_brightness(file_path1)
-#         check_brightness(file_path2)
+        check_brightness(file_path1)
+        check_brightness(file_path2)
 
-#         # Process the uploaded file with DeepFace
-#         result = DeepFace.verify(
-#             file_path1,
-#             file_path2,
-#             enforce_detection=False,
-#             model_name=USED_MODEL,
-#             detector_backend=USED_DETECTOR
-#         )
+        # Process the uploaded file with DeepFace
+        result = DeepFace.verify(
+            file_path1,
+            file_path2,
+            enforce_detection=False,
+            model_name=USED_MODEL,
+            detector_backend=USED_DETECTOR
+        )
 
-#         result['verified'] = bool(result['verified'].item())
-#         distance = result['distance']
-#         verified = result['verified']
-#         rounded_distance = round(distance, 2)
+        result['verified'] = bool(result['verified'].item())
+        distance = result['distance']
+        verified = result['verified']
+        rounded_distance = round(distance, 2)
 
-#         if (rounded_distance <= VALID_DISTANCE or verified == True):
-#             verified = True
-#         else:
-#             verified = False
+        if (rounded_distance <= VALID_DISTANCE or verified == True):
+            verified = True
+        else:
+            verified = False
 
-#         return JSONResponse(content={
-#             "status":200,
-#             "result": {
-#                 "verified":verified,
-#                 "distance":rounded_distance,
-#             }})
+        return JSONResponse(content={
+            "status":200,
+            "result": {
+                "verified":verified,
+                "distance":rounded_distance,
+            }})
 
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
-#     finally:
-#         if os.path.exists(file_path1):
-#             os.remove(file_path1)
-#         if os.path.exists(file_path2):
-#             os.remove(file_path2)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if os.path.exists(file_path1):
+            os.remove(file_path1)
+        if os.path.exists(file_path2):
+            os.remove(file_path2)
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="119.10.176.108", port=9001)
-    # uvicorn.run(app, host="localhost", port=9005)
+    # uvicorn.run(app, host="119.10.176.108", port=9001)
+    uvicorn.run(app, host="localhost", port=9005)
