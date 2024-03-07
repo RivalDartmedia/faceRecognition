@@ -2,7 +2,7 @@
     docstring
 """
 # pylint: disable=import-error
-
+import uuid
 import os
 import requests
 import uvicorn
@@ -108,8 +108,10 @@ async def create_upload_file(file1:str,file2:str,authorization:str = Header(...,
         print(e)
         raise HTTPException(status_code=403, detail="Invalid API key")
     try:
-        image1_path = "tmp/image1.jpg"
-        image2_path = "tmp/image2.jpg"
+        random_uuid1 = uuid.uuid4()
+        image1_path = os.path.join("tmp", str(random_uuid1) + ".jpg")
+        random_uuid2 = uuid.uuid4()
+        image2_path = os.path.join("tmp", str(random_uuid2) + ".jpg")
         with open(image1_path, "wb") as img_file:
             img_file.write(requests.get(file1).content)
         with open(image2_path, "wb") as img_file:
@@ -220,4 +222,4 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
 
 if __name__ == "__main__":
     uvicorn.run(app, host="202.43.169.13", port=9001)
-    # uvicorn.run(app, host="localhost", port=9005)
+    # uvicorn.run(app, host="localhost", port=9001)
