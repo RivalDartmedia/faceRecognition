@@ -2,11 +2,12 @@
     docstring
 """
 # pylint: disable=import-error
+import json
 import uuid
 import os
 import requests
 import uvicorn
-from fastapi import FastAPI, HTTPException, Header, UploadFile, File
+from fastapi import FastAPI, HTTPException, Header, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from deepface import DeepFace
@@ -66,6 +67,13 @@ class ResultResponse(BaseModel):
 class VerifyResponse(BaseModel):
     status: int = 200
     result: ResultResponse
+class ResultResponseFind(BaseModel):
+        code: int
+        status: str
+        name: str
+class VerifyResponseFind(BaseModel):
+    status: int = 200
+    result: ResultResponseFind
     
 async def log_request(request: Request, call_next):
     # Cetak detail permintaan HTTP
@@ -218,6 +226,145 @@ async def create_upload_file(file1: UploadFile = File(...),file2: UploadFile = F
             os.remove(file_path1)
         if os.path.exists(file_path2):
             os.remove(file_path2)
+            
+
+@app.post("/api/facematch/v1/register", response_model=VerifyResponseFind)
+async def register_user(image: UploadFile = File(...), name: str = Form(...)):
+    try:
+        # Save the uploaded file to the database directory
+        image_path = save_uploaded_file(image)
+        
+        # Load the existing JSON database
+        data_db = load_json_db()
+
+        # Append new user data to the JSON database
+        data_db.append({"path": image_path, "nama": name})
+        save_json_db(data_db)
+
+        # Delete the existing representations file if it exists
+        if os.path.exists(representation_file):
+            os.remove(representation_file)
+
+        # Regenerate the representations file using DeepFace
+        DeepFace.find(
+            img_path=image_path, 
+            db_path=db_path, 
+            model_name="Facenet512",
+            distance_metric="cosine",
+            enforce_detection=False
+        )
+
+        return JSONResponse(content={
+            "status": 200,
+            "result": {
+                "code": 0,
+                "status": "registered",
+                "name": name
+            }
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+            
+            
+@app.post("/api/facematch/v1/find", response_model=VerifyResponseFind)
+async def create_upload_file(image: UploadFile = File(...)):
+    """
+        Example Success Response
+        {
+            "status": 200,
+            "result": {
+                "code": 0,
+                "status": "match",
+                "name": "John Doe"
+            }
+        }
+    """
+    image_path = None
+    try:
+        threshold = 0.26
+        db_path = "my_db"
+        similarity_metric = "cosine"
+        
+        # Save the uploaded file to a temporary directory on disk
+        image_path = file_to_image(image)
+
+        # Placeholder brightness check function
+        check_brightness(image_path)
+        
+        # Load the JSON data
+        with open("data_db.json", "r") as f:
+            data_db = json.load(f)
+
+        # Convert list of dictionaries to a dictionary for quick lookup
+        path_to_name = {entry["path"]: entry["nama"] for entry in data_db}
+
+        # Process the uploaded file with DeepFace
+        results = DeepFace.find(
+            img_path=image_path, 
+            db_path=db_path, 
+            model_name="Facenet512",
+            distance_metric=similarity_metric,
+            enforce_detection=False
+        )
+        print(f"result: {results}")
+        
+        if results:
+            # Since the results might contain multiple DataFrames, iterate over them
+            df = results[0]
+            if not df.empty:
+                # Get the first row of the DataFrame
+                row = df.iloc[0]
+                file_path = row["identity"]
+                cosine_similarity = row.get(f"Facenet512_{similarity_metric}", None)
+                
+                if cosine_similarity is not None and cosine_similarity < threshold:
+                    print(f"file_path: {file_path}")
+                    name = path_to_name.get(file_path, "Unknown")
+                    return JSONResponse(content={
+                        "status": 200,
+                        "result": {
+                            "code": 0,
+                            "status": "match",
+                            "name": name
+                        }
+                    })
+        # if results:
+        #     # Iterate over each DataFrame in the results
+        #     for df in results:
+        #         for index, row in df.iterrows():
+        #             file_path = row["identity"]
+        #             file_name = os.path.basename(file_path)
+        #             cosine_similarity = row.get(similarity_metric, None)
+        #             print(f"similarity: {row.get(similarity_metric, None)}")
+        #             is_same_person = cosine_similarity < threshold
+        #             print(f"similarity: {cosine_similarity} && filename: {file_path}, {is_same_person}")
+        #             if is_same_person:
+        #                 print(f"file_path:{file_path}\n{cosine_similarity}")
+        #                 name = path_to_name.get(file_path, "Unknown")
+        #                 return JSONResponse(content={
+        #                     "status": 200,
+        #                     "result": {
+        #                         "code": 0,
+        #                         "status": "match",
+        #                         "name": name
+        #                     }
+        #                 })
+
+        # If no match was found in the results
+        return JSONResponse(content={
+            "status": 200,
+            "result": {
+                "code": 20,
+                "status": "not match",
+                "name": "None"
+            }
+        })
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if os.path.exists(image_path):
+            os.remove(image_path)
 
 
 if __name__ == "__main__":

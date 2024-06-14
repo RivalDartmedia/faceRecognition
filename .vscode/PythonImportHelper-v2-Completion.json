@@ -1,5 +1,14 @@
 [
     {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
         "label": "uuid",
         "kind": 6,
         "isExtraImport": true,
@@ -76,7 +85,23 @@
         "documentation": {}
     },
     {
+        "label": "Form",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "Request",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
         "importPath": "fastapi",
         "description": "fastapi",
         "isExtraImport": true,
@@ -171,7 +196,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")\n    print(f\"Received request: {request.method} {request.url}\")",
+        "peekOfCode": "class ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nclass ResultResponseFind(BaseModel):\n        code: int\n        status: str\n        name: str",
         "detail": "app",
         "documentation": {}
     },
@@ -180,7 +205,25 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")\n    print(f\"Received request: {request.method} {request.url}\")\n    print(f\"Headers: {request.headers}\")\n    print(f\"Query Parameters: {request.query_params}\")\n    print(f\"Path Parameters: {request.path_params}\")",
+        "peekOfCode": "class VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nclass ResultResponseFind(BaseModel):\n        code: int\n        status: str\n        name: str\nclass VerifyResponseFind(BaseModel):\n    status: int = 200\n    result: ResultResponseFind",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "ResultResponseFind",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class ResultResponseFind(BaseModel):\n        code: int\n        status: str\n        name: str\nclass VerifyResponseFind(BaseModel):\n    status: int = 200\n    result: ResultResponseFind\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "VerifyResponseFind",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class VerifyResponseFind(BaseModel):\n    status: int = 200\n    result: ResultResponseFind\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")\n    print(f\"Received request: {request.method} {request.url}\")\n    print(f\"Headers: {request.headers}\")\n    print(f\"Query Parameters: {request.query_params}\")\n    print(f\"Path Parameters: {request.path_params}\")",
         "detail": "app",
         "documentation": {}
     },
@@ -243,7 +286,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "USED_DETECTOR = DETECTORS[2]\nVALID_DISTANCE = 0.37\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):",
+        "peekOfCode": "USED_DETECTOR = DETECTORS[2]\nVALID_DISTANCE = 0.37\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nclass ResultResponseFind(BaseModel):",
         "detail": "app",
         "documentation": {}
     },
@@ -252,7 +295,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "VALID_DISTANCE = 0.37\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP",
+        "peekOfCode": "VALID_DISTANCE = 0.37\napiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nclass ResultResponseFind(BaseModel):\n        code: int",
         "detail": "app",
         "documentation": {}
     },
@@ -261,8 +304,35 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "apiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nasync def log_request(request: Request, call_next):\n    # Cetak detail permintaan HTTP\n    print(f\"Time: {datetime.now()}\\t\")",
+        "peekOfCode": "apiKey = \"bGjJKURn3HPeafvE/BRv2MMfe3F6VRpf9qUbv4Q6Qf4=\"\nclass ResultResponse(BaseModel):\n        verified:bool = False\n        distance:float = VALID_DISTANCE\nclass VerifyResponse(BaseModel):\n    status: int = 200\n    result: ResultResponse\nclass ResultResponseFind(BaseModel):\n        code: int\n        status: str",
         "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "save_uploaded_file",
+        "kind": 2,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "def save_uploaded_file(uploaded_file: UploadFile) -> str:\n    filename = f\"{uuid.uuid4().hex}.jpeg\"\n    file_path = os.path.join(db_path, filename)\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(uploaded_file.file, buffer)\n    return file_path\ndef load_json_db():\n    if os.path.exists(json_db_path):\n        with open(json_db_path, \"r\") as f:\n            return json.load(f)",
+        "detail": "functions",
+        "documentation": {}
+    },
+    {
+        "label": "load_json_db",
+        "kind": 2,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "def load_json_db():\n    if os.path.exists(json_db_path):\n        with open(json_db_path, \"r\") as f:\n            return json.load(f)\n    else:\n        return []\ndef save_json_db(data_db):\n    with open(json_db_path, \"w\") as f:\n        json.dump(data_db, f, indent=4)\ndef resize_image_dimension(file_path):",
+        "detail": "functions",
+        "documentation": {}
+    },
+    {
+        "label": "save_json_db",
+        "kind": 2,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "def save_json_db(data_db):\n    with open(json_db_path, \"w\") as f:\n        json.dump(data_db, f, indent=4)\ndef resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:",
+        "detail": "functions",
         "documentation": {}
     },
     {
@@ -306,7 +376,7 @@
         "kind": 5,
         "importPath": "functions",
         "description": "functions",
-        "peekOfCode": "MIN_BRIGHTNESS_THRESHOLD = 75\nMAX_BRIGHTNESS_THRESHOLD = 175\ndef resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:\n        return file_path",
+        "peekOfCode": "MIN_BRIGHTNESS_THRESHOLD = 75\nMAX_BRIGHTNESS_THRESHOLD = 175\ndb_path = \"my_db\"\njson_db_path = \"./data_db.json\"\nrepresentation_file = os.path.join(db_path, \"representations_facenet512.pkl\")\ndef save_uploaded_file(uploaded_file: UploadFile) -> str:\n    filename = f\"{uuid.uuid4().hex}.jpeg\"\n    file_path = os.path.join(db_path, filename)\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(uploaded_file.file, buffer)",
         "detail": "functions",
         "documentation": {}
     },
@@ -315,25 +385,70 @@
         "kind": 5,
         "importPath": "functions",
         "description": "functions",
-        "peekOfCode": "MAX_BRIGHTNESS_THRESHOLD = 175\ndef resize_image_dimension(file_path):\n    \"\"\"\n        docstring\n    \"\"\"\n    image = Image.open(file_path)\n    width, height = image.size\n    if width <= 800 or height <= 800:\n        return file_path\n    width = round(width*800/height)",
+        "peekOfCode": "MAX_BRIGHTNESS_THRESHOLD = 175\ndb_path = \"my_db\"\njson_db_path = \"./data_db.json\"\nrepresentation_file = os.path.join(db_path, \"representations_facenet512.pkl\")\ndef save_uploaded_file(uploaded_file: UploadFile) -> str:\n    filename = f\"{uuid.uuid4().hex}.jpeg\"\n    file_path = os.path.join(db_path, filename)\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(uploaded_file.file, buffer)\n    return file_path",
         "detail": "functions",
         "documentation": {}
     },
     {
-        "label": "temp_file_path",
+        "label": "db_path",
+        "kind": 5,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "db_path = \"my_db\"\njson_db_path = \"./data_db.json\"\nrepresentation_file = os.path.join(db_path, \"representations_facenet512.pkl\")\ndef save_uploaded_file(uploaded_file: UploadFile) -> str:\n    filename = f\"{uuid.uuid4().hex}.jpeg\"\n    file_path = os.path.join(db_path, filename)\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(uploaded_file.file, buffer)\n    return file_path\ndef load_json_db():",
+        "detail": "functions",
+        "documentation": {}
+    },
+    {
+        "label": "json_db_path",
+        "kind": 5,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "json_db_path = \"./data_db.json\"\nrepresentation_file = os.path.join(db_path, \"representations_facenet512.pkl\")\ndef save_uploaded_file(uploaded_file: UploadFile) -> str:\n    filename = f\"{uuid.uuid4().hex}.jpeg\"\n    file_path = os.path.join(db_path, filename)\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(uploaded_file.file, buffer)\n    return file_path\ndef load_json_db():\n    if os.path.exists(json_db_path):",
+        "detail": "functions",
+        "documentation": {}
+    },
+    {
+        "label": "representation_file",
+        "kind": 5,
+        "importPath": "functions",
+        "description": "functions",
+        "peekOfCode": "representation_file = os.path.join(db_path, \"representations_facenet512.pkl\")\ndef save_uploaded_file(uploaded_file: UploadFile) -> str:\n    filename = f\"{uuid.uuid4().hex}.jpeg\"\n    file_path = os.path.join(db_path, filename)\n    with open(file_path, \"wb\") as buffer:\n        shutil.copyfileobj(uploaded_file.file, buffer)\n    return file_path\ndef load_json_db():\n    if os.path.exists(json_db_path):\n        with open(json_db_path, \"r\") as f:",
+        "detail": "functions",
+        "documentation": {}
+    },
+    {
+        "label": "db_path",
         "kind": 5,
         "importPath": "test",
         "description": "test",
-        "peekOfCode": "temp_file_path = f\"tmp/1.jpg\"\n# Process the uploaded file with DeepFace\nresult = DeepFace.verify(temp_file_path, temp_file_path)\nprint(result)",
+        "peekOfCode": "db_path = \"my_db\"\nsimilarity_metric = \"cosine\"\nthreshold = 0.27  # Define the threshold for cosine similarity\n# Perform the face recognition search\nresults = DeepFace.find(img_path=\"./test.jpeg\", \n                        db_path=db_path, \n                        model_name=\"Facenet512\",\n                        distance_metric=similarity_metric,\n                        enforce_detection=False)\n# Check if any matches were found",
         "detail": "test",
         "documentation": {}
     },
     {
-        "label": "result",
+        "label": "similarity_metric",
         "kind": 5,
         "importPath": "test",
         "description": "test",
-        "peekOfCode": "result = DeepFace.verify(temp_file_path, temp_file_path)\nprint(result)",
+        "peekOfCode": "similarity_metric = \"cosine\"\nthreshold = 0.27  # Define the threshold for cosine similarity\n# Perform the face recognition search\nresults = DeepFace.find(img_path=\"./test.jpeg\", \n                        db_path=db_path, \n                        model_name=\"Facenet512\",\n                        distance_metric=similarity_metric,\n                        enforce_detection=False)\n# Check if any matches were found\nif results:",
+        "detail": "test",
+        "documentation": {}
+    },
+    {
+        "label": "threshold",
+        "kind": 5,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "threshold = 0.27  # Define the threshold for cosine similarity\n# Perform the face recognition search\nresults = DeepFace.find(img_path=\"./test.jpeg\", \n                        db_path=db_path, \n                        model_name=\"Facenet512\",\n                        distance_metric=similarity_metric,\n                        enforce_detection=False)\n# Check if any matches were found\nif results:\n    # Iterate over each DataFrame in the results",
+        "detail": "test",
+        "documentation": {}
+    },
+    {
+        "label": "results",
+        "kind": 5,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "results = DeepFace.find(img_path=\"./test.jpeg\", \n                        db_path=db_path, \n                        model_name=\"Facenet512\",\n                        distance_metric=similarity_metric,\n                        enforce_detection=False)\n# Check if any matches were found\nif results:\n    # Iterate over each DataFrame in the results\n    for df in results:\n        for index, row in df.iterrows():",
         "detail": "test",
         "documentation": {}
     }

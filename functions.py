@@ -2,6 +2,8 @@
     docstring
 """
 
+from fastapi import UploadFile
+import json
 import os
 import uuid
 import shutil
@@ -12,6 +14,28 @@ from PIL import Image
 # SET BRIGHTNESS CONFIG HERE
 MIN_BRIGHTNESS_THRESHOLD = 75
 MAX_BRIGHTNESS_THRESHOLD = 175
+
+db_path = "my_db"
+json_db_path = "./data_db.json"
+representation_file = os.path.join(db_path, "representations_facenet512.pkl")
+
+def save_uploaded_file(uploaded_file: UploadFile) -> str:
+    filename = f"{uuid.uuid4().hex}.jpeg"
+    file_path = os.path.join(db_path, filename)
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(uploaded_file.file, buffer)
+    return file_path
+
+def load_json_db():
+    if os.path.exists(json_db_path):
+        with open(json_db_path, "r") as f:
+            return json.load(f)
+    else:
+        return []
+
+def save_json_db(data_db):
+    with open(json_db_path, "w") as f:
+        json.dump(data_db, f, indent=4)
 
 def resize_image_dimension(file_path):
     """
