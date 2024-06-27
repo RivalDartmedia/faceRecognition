@@ -314,12 +314,16 @@ async def create_upload_file(image: UploadFile = File(...)):
             if not df.empty:
                 # Get the first row of the DataFrame
                 row = df.iloc[0]
+                print(row)
                 file_path = row["identity"]
-                cosine_similarity = row.get(f"Facenet512_{similarity_metric}", None)
+                path = normalize_file_path(file_path)
+                cosine_similarity = row["distance"]
+                print(cosine_similarity)
+                # cosine_similarity = row.get(f"threshold", None)
                 
                 if cosine_similarity is not None and cosine_similarity < threshold:
-                    print(f"file_path: {file_path}")
-                    name = path_to_name.get(file_path, "Unknown")
+                    name = path_to_name.get(path, "Unknown")
+                    print(path_to_name)
                     return JSONResponse(content={
                         "status": 200,
                         "result": {
@@ -368,5 +372,5 @@ async def create_upload_file(image: UploadFile = File(...)):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="202.43.169.13", port=9001)
-    # uvicorn.run(app, host="localhost", port=9001)
+    # uvicorn.run(app, host="202.43.169.13", port=9001)
+    uvicorn.run(app, host="localhost", port=9001)

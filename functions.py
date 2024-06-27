@@ -26,6 +26,12 @@ def save_uploaded_file(uploaded_file: UploadFile) -> str:
         shutil.copyfileobj(uploaded_file.file, buffer)
     return file_path
 
+def normalize_file_path(file_path):
+    """
+    Normalize file path by replacing backslashes with forward slashes.
+    """
+    return file_path.replace("\\", "/")
+
 def load_json_db():
     if os.path.exists(json_db_path):
         with open(json_db_path, "r") as f:
