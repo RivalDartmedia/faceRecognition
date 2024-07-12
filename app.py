@@ -281,7 +281,7 @@ async def create_upload_file(image: UploadFile = File(...)):
     """
     image_path = None
     try:
-        threshold = 0.26
+        threshold = 0.3
         db_path = "my_db"
         similarity_metric = "cosine"
         
